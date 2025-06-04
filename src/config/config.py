@@ -5,10 +5,10 @@ import os
 from pathlib import Path
 
 # Base directory
-BASE_DIR = Path(__file__).parent.parent.parent
+BASE_DIR = Path(__file__).parent.parent
 
 # Model paths
-MODEL_DIR = BASE_DIR / "src" / "model_weights"
+MODEL_DIR = BASE_DIR / "model_weights"
 
 # Available models configuration
 AVAILABLE_MODELS = {
