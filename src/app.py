@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 from models.model_manager import ModelManager
-from utils.text_preprocessing import TextPreprocessor, validate_text_input, extract_text_features
+from utils.text_preprocessing import TextPreprocessor, validate_text_input, extract_text_features, text_process_pipeline
 from utils.ui_components import (
     display_prediction_result, 
     display_text_analysis, 
@@ -17,6 +17,11 @@ from utils.ui_components import (
     display_model_performance_comparison
 )
 from config.config import APP_CONFIG, UI_CONFIG
+
+# Make text_process_pipeline available globally for pickle compatibility
+import builtins
+builtins.text_process_pipeline = text_process_pipeline
+globals()['text_process_pipeline'] = text_process_pipeline
 
 # Page configuration
 st.set_page_config(

@@ -13,7 +13,15 @@ from utils.text_preprocessing import TextPreprocessor, text_process_pipeline
 
 # Make text_process_pipeline available globally for pickle compatibility
 import sys
+import builtins
+
+# Make function available in multiple contexts for pickle compatibility
 sys.modules[__name__].text_process_pipeline = text_process_pipeline
+builtins.text_process_pipeline = text_process_pipeline
+
+# Also make it available in __main__ module if running as script
+if hasattr(sys.modules.get('__main__'), '__file__'):
+    sys.modules['__main__'].text_process_pipeline = text_process_pipeline
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -55,8 +63,16 @@ class ModelManager:
             # Load the main model
             # Ensure text_process_pipeline is available globally for pipeline models
             if model_config['type'] == 'pipeline':
+                # Make function available in multiple namespaces for pickle compatibility
                 import builtins
+                import __main__
+                
                 builtins.text_process_pipeline = text_process_pipeline
+                sys.modules['__main__'].text_process_pipeline = text_process_pipeline
+                
+                # Also try to set it in the main module's globals
+                if hasattr(__main__, '__dict__'):
+                    __main__.__dict__['text_process_pipeline'] = text_process_pipeline
             
             with open(model_path, 'rb') as f:
                 model = pickle.load(f)
